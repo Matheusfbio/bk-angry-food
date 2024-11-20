@@ -28,6 +28,16 @@ const swaggerOptions = {
         url: `http://localhost:${process.env.PORT || 3000}`,
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          // Esquema de segurança para JWT
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // Indica que o formato esperado é JWT
+        },
+      },
+    },
   },
   apis: ["./src/routes/*.js"], // Caminho para suas definições de rota
 };

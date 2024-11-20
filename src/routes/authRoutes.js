@@ -57,11 +57,20 @@
  *         description: Usuário ou senha inválidos
  */
 const express = require("express");
-const authController = require("../controllers/authController");
-
 const router = express.Router();
+const { registerUser, loginUser } = require("../controllers/authController");
+const { protect } = require("../middleware/authMiddleware"); // Importando o middleware de proteção
 
-router.post("/register", authController.registerUser);
-router.post("/login", authController.loginUser);
+// Rota para registrar um novo usuário (sem autenticação)
+router.post("/register", registerUser);
+
+// Rota para fazer login (sem autenticação)
+router.post("/login", loginUser);
+
+// Rota protegida (exemplo: rota de usuário logado)
+router.get("/profile", protect, (req, res) => {
+  // Apenas usuários autenticados podem acessar
+  res.json({ message: "Welcome to your profile", userId: req.user });
+});
 
 module.exports = router;

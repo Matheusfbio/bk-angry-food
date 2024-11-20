@@ -1,30 +1,37 @@
 const jwt = require("jsonwebtoken");
 
-// Middleware para verificar o token JWT
 const protect = (req, res, next) => {
   let token;
 
-  // Verificar se o token está no cabeçalho da requisição
+  // Verificar se o token foi enviado no cabeçalho
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
+      // Extrair o token do cabeçalho
       token = req.headers.authorization.split(" ")[1];
 
-      // Verificar e decodificar o token
+      // Verificar o token usando o segredo da aplicação
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Adicionar o ID do usuário ao objeto da requisição
+      // Adicionar as informações do usuário decodificado ao req
       req.user = decoded.id;
+      req.token = token; // Adicionar o token para acessar na rota
+
       next();
     } catch (error) {
-      res.status(401).json({ message: "Token inválido ou expirado" });
+      res
+        .status(401)
+        .json({ message: "Não autorizado, token inválido ou expirado" });
     }
   }
 
+  // Se o token não for fornecido
   if (!token) {
-    res.status(401).json({ message: "Não autorizado, token não fornecido" });
+    return res
+      .status(401)
+      .json({ message: "Não autorizado, token não fornecido" });
   }
 };
 
