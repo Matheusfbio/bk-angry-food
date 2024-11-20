@@ -8,6 +8,8 @@ dotenv.config();
 
 const menuRoutes = require("./routes/menuRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const authRoutes = require("./routes/authRoutes");
+const { protect } = require("./middleware/authMiddleware");
 
 const app = express();
 app.use(express.json());
@@ -34,8 +36,9 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
-app.use("/api/menu", menuRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/menu", protect, menuRoutes); // Protected route
+app.use("/api/orders", protect, orderRoutes); // Protected route
 
 mongoose
   .connect(process.env.MONGO_URI, {
