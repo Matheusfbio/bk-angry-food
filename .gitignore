@@ -20,7 +20,6 @@ coverage/
 
 # Swagger generated files
 *.yaml
-*.json
 
 # MacOS
 .DS_Store
