@@ -34,3 +34,16 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+exports.deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // Lógica para deletar o pedido, exemplo:
+    const result = await OrderModel.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
