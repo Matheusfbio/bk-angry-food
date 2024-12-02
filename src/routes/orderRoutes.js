@@ -92,4 +92,27 @@ router.get("/", orderController.getOrders);
  */
 router.patch("/:id", orderController.updateOrderStatus);
 
+/**
+ * @swagger
+ * /api/orders/{id}:
+ *   delete:
+ *     summary: Delete an order by ID
+ *     tags: [Orders]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the order to delete
+ *     responses:
+ *       200:
+ *         description: Order deleted successfully
+ *       404:
+ *         description: Order not found
+ *       500:
+ *         description: Server error
+ */
+router.delete("/:id", orderController.deleteOrder);
+
 module.exports = router;
