@@ -1,39 +1,24 @@
 version: "3.8"
 
 services:
-  # Serviço da aplicação Node.js
   backend:
-    image: node:16 # Ou a versão que você preferir
-    container_name: menu-api
-    working_dir: /app
-    volumes:
-      - ./src:/app # Mapeia o diretório 'src' para o diretório no container
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000" # Porta exposta para acessar o backend
+      - "3000:3000"
     environment:
-      - NODE_ENV=development
-      - MONGO_URI=mongodb://mongo:27017/menuapp
-    command: "npm start" # Comando para iniciar a aplicação
+      MONGO_URI: mongodb://mongodb:27017/restaurant
     depends_on:
-      - mongo
-    networks:
-      - app-network
+      - mongodb
 
-  # Serviço do banco de dados MongoDB
-  mongo:
-    image: mongo:latest
-    container_name: mongo-db
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
     ports:
-      - "27017:27017" # Porta do MongoDB
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db # Persistência de dados
-    networks:
-      - app-network
-
-# Definição da rede e volume persistente
-networks:
-  app-network:
-    driver: bridge
+      - mongo-data:/data/db
 
 volumes:
-  mongo_data:
+  mongo-data:
